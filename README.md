@@ -118,6 +118,7 @@ ActionCLIP is written and maintained by [Mengmeng Wang](https://sallymmx.github.
 
 ## Citing ActionCLIP
 If you find ActionClip useful in your research, please cite our paper.
+```
 @misc{wang2021actionclip,
       title={ActionCLIP: A New Paradigm for Video Action Recognition}, 
       author={Mengmeng Wang and Jiazheng Xing and Yong Liu},
@@ -126,6 +127,6 @@ If you find ActionClip useful in your research, please cite our paper.
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
-
+```
 # Acknowledgments
 Our code is based on [CLIP](https://github.com/openai/CLIP) and [STM](https://openaccess.thecvf.com/content_ICCV_2019/papers/Jiang_STM_SpatioTemporal_and_Motion_Encoding_for_Action_Recognition_ICCV_2019_paper.pdf).
