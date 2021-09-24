@@ -7,7 +7,7 @@
 ## Content 
  - [Prerequisites](#prerequisites)
 - [Data Preparation](#data-preparation)
-- [Uodates](#updates)
+- [Updates](#updates)
 - [Pretrained Models](#pretrained-models)
   * [Kinetics-400](#kinetics-400)
   * [Hmdb51 && UCF101](#HMDB51&&UCF101)
