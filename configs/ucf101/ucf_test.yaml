@@ -1,0 +1,32 @@
+pretrain:  '/public/home/ock/video_clip/video-clip/clip_models/vit16_8f/model_best.pt'
+seed: 1024
+data:
+    dataset: ucf101
+    modality: RGB
+    num_segments: 8
+    seg_length: 1
+    split: 1
+    batch_size: 32
+    workers: 8
+    num_classes: 101
+    image_tmpl: 'img_{:05d}.jpg'
+    val_list: '/public/home/ock/video_clip/video-clip/lists/ucf101/val_rgb_split1.txt' #
+    label_list: 'lists/ucf_labels.csv'
+    index_bias: 1
+    input_size: 224
+    randaug:
+        N: 0 #2
+        M: 0  #9
+network:
+    arch: ViT-B/16  #ViT-B/32 ViT-B/16
+    init: True 
+    drop_out: 0.0 
+    emb_dropout: 0.0 
+    type: clip_ucf
+    sim_header: "Transf"   #Transf   meanP  LSTM Conv_1D Transf_cls
+    fix_text: False
+    fix_img: False
+    describe:
+logging:
+    print_freq: 10
+    eval_freq: 1

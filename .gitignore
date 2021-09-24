@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info
+.pytest_cache
+.ipynb_checkpoints
+exp/
+thumb.sdb
+.DS_Store
+.idea
+wandb/
+trained_models/

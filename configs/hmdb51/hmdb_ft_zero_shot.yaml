@@ -1,0 +1,38 @@
+pretrain:  '/public/home/ock/video_clip/video-clip/clip_models/vit16_8f/model_best.pt'
+seed: 1024
+data:
+    dataset: hmdb51
+    modality: RGB
+    num_segments: 8
+    seg_length: 1
+    split: 1
+    batch_size: 32
+    workers: 8
+    gpus: 2
+    num_classes: 51
+    image_tmpl: 'img_{:05d}.jpg'
+    flow_tmpl: '{}_{:05d}.jpg'
+    val_list: '/public/home/ock/video_clip/video-clip/lists/hmdb51/val_rgb_split1.txt'
+    label_list: 'lists/hmdb51_labels.csv'
+    index_bias: 1
+    input_size: 224
+    randaug:
+        N: 0 #2
+        M: 0  #9
+network:
+    arch: ViT-B/16  #ViT-B/32 ViT-B/16
+    init: True
+    drop_out: 0.0 # probability of an element to be zeroed
+    emb_dropout: 0.0 # probability of embedding to be zeroed
+    partial_bn: False
+    version: ''
+    bn_momentum: 0.1
+    consensus_type: avg
+    type: clip_hmdb
+    sim_header: "Transf"  #Transf   meanP   LSTM   Transf_cls Conv_1D
+    fix_text: False
+    fix_img: False
+    describe:
+logging:
+    print_freq: 10
+    eval_freq: 1

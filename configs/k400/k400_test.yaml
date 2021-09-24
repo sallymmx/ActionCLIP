@@ -1,0 +1,35 @@
+pretrain: 
+seed: 1024
+data:
+    dataset: kinetics400
+    modality: RGB
+    num_segments: 8
+    seg_length: 1
+    split: 1
+    batch_size: 64
+    workers: 16
+    gpus: 4
+    num_classes: 400
+    image_tmpl: 'img_{:05d}.jpg'
+    val_list: 'lists/k4001/val_frames_re.txt' #
+    label_list: 'lists/kinetics_400_labels.csv'
+    index_bias: 1
+    input_size: 224
+    random_shift: False
+network:
+    arch: ViT-B/32  #ViT-B/32 ViT-B/16
+    init: True
+    tsm: False
+    drop_out: 0.0 
+    emb_dropout: 0.0 
+    bn_momentum: 0.1
+    consensus_type: avg
+    type: clip_k400
+    sim_header: "Transf"   #Transf   meanP  LSTM  Conv_1D  Transf_cls
+    joint: False
+    describe:
+    ratio: 1
+    f_ratio: 10
+logging:
+    print_freq: 10
+    eval_freq: 1
