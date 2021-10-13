@@ -7,7 +7,7 @@
 ## Content 
  - [Prerequisites](#prerequisites)
 - [Data Preparation](#data-preparation)
-- [Updates](#updates)
+- [Uodates](#updates)
 - [Pretrained Models](#pretrained-models)
   * [Kinetics-400](#kinetics-400)
   * [Hmdb51 && UCF101](#HMDB51&&UCF101)
@@ -58,6 +58,7 @@ prompt since it obtains the best results) and input frames configurations on k40
 | ViT-B/16  | 8 |   81.09%    | 95.49% |[link]() 
 | ViT-B/16 | 16 | 81.68%  | 95.87% |[link]() 
 | ViT-B/16 | 32 |82.32%    | 96.20% |[link](https://pan.baidu.com/s/1t3wROD0rLHQkxB2yD7TTkA) pwd:v7nn                                                       
+*Note that we show the 8-frame ViT-B/32 training log file in [ViT32_8F_K400.log](logs/ViT32_8F_K400.log).
 
 ### HMDB51 && UCF101
 On HMDB51 and UCF101 datasets, the accuracy(k400 pretrained) is reported under the accurate setting.
@@ -118,15 +119,6 @@ ActionCLIP is written and maintained by [Mengmeng Wang](https://sallymmx.github.
 
 ## Citing ActionCLIP
 If you find ActionClip useful in your research, please cite our paper.
-```
-@misc{wang2021actionclip,
-      title={ActionCLIP: A New Paradigm for Video Action Recognition}, 
-      author={Mengmeng Wang and Jiazheng Xing and Yong Liu},
-      year={2021},
-      eprint={2109.08472},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-```
+
 # Acknowledgments
 Our code is based on [CLIP](https://github.com/openai/CLIP) and [STM](https://openaccess.thecvf.com/content_ICCV_2019/papers/Jiang_STM_SpatioTemporal_and_Motion_Encoding_for_Action_Recognition_ICCV_2019_paper.pdf).
