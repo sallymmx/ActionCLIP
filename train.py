@@ -89,10 +89,10 @@ def main():
     wandb.watch(model)
     wandb.watch(fusion_model)
 
-    train_data = Action_DATASETS(config.data.train_list,config.data.label_list,num_segments=config.data.num_segments,image_tmpl=config.data.image_tmpl,random_shift=config.random_shift,
+    train_data = Action_DATASETS(config.data.train_list,config.data.label_list,num_segments=config.data.num_segments,image_tmpl=config.data.image_tmpl,random_shift=config.data.random_shift,
                        transform=transform_train)
     train_loader = DataLoader(train_data,batch_size=config.data.batch_size,num_workers=config.data.workers,shuffle=True,pin_memory=False,drop_last=True)
-    val_data = Action_DATASETS(config.data.val_list,config.data.label_list, random_shift=config.random_shift,num_segments=config.data.num_segments,image_tmpl=config.data.image_tmpl,
+    val_data = Action_DATASETS(config.data.val_list,config.data.label_list, random_shift=False,num_segments=config.data.num_segments,image_tmpl=config.data.image_tmpl,
                        transform=transform_val)
     val_loader = DataLoader(val_data,batch_size=config.data.batch_size,num_workers=config.data.workers,shuffle=False,pin_memory=False,drop_last=True)
 

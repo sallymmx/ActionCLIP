@@ -21,7 +21,7 @@ data:
     randaug:
         N: 2 #2
         M: 9  #9
-    random_shift: False
+    random_shift: True
 network:
     arch: ViT-B/32  #ViT-B/32 ViT-B/16
     init: True

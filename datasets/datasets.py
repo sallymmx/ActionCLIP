@@ -87,7 +87,6 @@ class Action_DATASETS(data.Dataset):
         self.num_segments = num_segments
         self.seg_length = new_length
         self.image_tmpl = image_tmpl
-        print('random_shift:{}'.format(random_shift))
         self.transform = transform
         self.random_shift = random_shift
         self.test_mode = test_mode
