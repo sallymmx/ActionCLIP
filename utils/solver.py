@@ -7,12 +7,15 @@ from utils.lr_scheduler import WarmupMultiStepLR, WarmupCosineAnnealingLR
 
 def _optimizer(config, model, fusion_model):
     if config.solver.optim == 'adam':
-        optimizer = optim.Adam(model.parameters(), lr=config.solver.lr, betas=(0.9, 0.98), eps=1e-8,
+        optimizer = optim.Adam([{'params': model.parameters()},  
+            {'params': fusion_model.parameters(), 'lr': config.solver.lr * config.solver.f_ratio}],
+                                lr=config.solver.lr, betas=(0.9, 0.98), eps=1e-8,
                                weight_decay=0.2)  # Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
         print('Adam')
     elif config.solver.optim == 'sgd':
 
-        optimizer = optim.SGD(model.parameters(),
+        optimizer = optim.SGD([{'params': model.parameters()},  
+            {'params': fusion_model.parameters(), 'lr': config.solver.lr * config.solver.f_ratio}],
                               config.solver.lr,
                               momentum=config.solver.momentum,
                               weight_decay=config.solver.weight_decay)
