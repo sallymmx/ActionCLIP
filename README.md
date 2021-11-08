@@ -79,7 +79,7 @@ On HMDB51 and UCF101 datasets, the accuracy(k400 pretrained) is reported under t
 To test the downloaded pretrained models on Kinetics or HMDB51 or UCF101, you can run `scripts/run_test.sh`. For example:
 ```
 # test
-bash scripts/run_test.sh  ./configs/k400/k400_ft_tem.yaml
+bash scripts/run_test.sh  ./configs/k400/k400_test.yaml
 
 ```
 ### Zero-shot
@@ -102,17 +102,17 @@ We provided several examples to train ActionCLIP  with this repo:
 - To train on Kinetics from CLIP pretrained models, you can run:
 ```
 # train 
-bash scripts/run_train.sh  ./configs/k400/k400_ft_tem_test.yaml
+bash scripts/run_train.sh  ./configs/k400/k400_train.yaml
 ```
 - To train on HMDB51 from Kinetics400 pretrained models, you can run:
 ```
 # train 
-bash scripts/run_train.sh  ./configs/hmdb51/hmdb_ft.yaml
+bash scripts/run_train.sh  ./configs/hmdb51/hmdb_train.yaml
 ```
 - To train on UCF101 from Kinetics400 pretrained models, you can run:
 ```
 # train 
-bash scripts/run_train.sh  ./configs/ucf101/ucf_ft.yaml
+bash scripts/run_train.sh  ./configs/ucf101/ucf_train.yaml
 ```
 More training details, you can find in  [configs/README.md](configs/README.md)
 

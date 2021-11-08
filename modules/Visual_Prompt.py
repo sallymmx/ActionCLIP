@@ -195,7 +195,7 @@ class visual_prompt(nn.Module):
             self.lstm_visual.flatten_parameters()
             x = torch.cat((x, x_original[:, x.size(1):, ...].contiguous()), dim=1)
             x = x.type(x_original.dtype) + x_original
-        elif self.sim_header == "seqTransf_cls":
+        elif self.sim_header == "Transf_cls":
             x_original = x
             return self.transformer(x).type(x_original.dtype)
 
