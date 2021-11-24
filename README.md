@@ -57,9 +57,9 @@ prompt since it obtains the best results) and input frames configurations on k40
  | model             | n-frame     | top1 Acc(single-crop) | top5 Acc(single-crop)| checkpoint                                                   |
 | :-----------------: | :-----------: | :-------------: |:-------------: |:---------------------------------------------------------: | 
 |ViT-B/32 | 8 | 78.36%          | 94.25%|[link](https://pan.baidu.com/s/1NOKtVG6wxCrKvZ12IAofSQ) pwd:b5ni 
-| ViT-B/16  | 8 |   81.09%    | 95.49% |[link]() 
-| ViT-B/16 | 16 | 81.68%  | 95.87% |[link]() 
-| ViT-B/16 | 32 |82.32%    | 96.20% |[link](https://pan.baidu.com/s/1t3wROD0rLHQkxB2yD7TTkA) pwd:v7nn                                                       
+| ViT-B/16  | 8 |   81.09%    | 95.49% |[link](https://pan.baidu.com/s/1alr0JNF5sdcU3jtCpT0Bow) pwd:hqtv
+| ViT-B/16 | 16 | 81.68%  | 95.87% |[link](https://pan.baidu.com/s/1iWpuUzML3gfxq-4KrwIO5A) pwd:dk4r
+| ViT-B/16 | 32 |82.32%    | 96.20% |[link](https://pan.baidu.com/s/1hnmFQcoe6ii_mU7BzeTL5Q) pwd:35uu                                                      
 
 
 ### HMDB51 && UCF101
