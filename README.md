@@ -1,8 +1,12 @@
 # This is an official pytorch implementation of ActionCLIP: A New Paradigm for Video Action Recognition [[arXiv]](https://arxiv.org/abs/2109.08472)
 
+## Updates
+ - 2022.01: Add the trained model download link of [google driver](https://drive.google.com/drive/folders/1qs5SzQIl__qo2x9h0YudpGzHhNnPGqK6?usp=sharing).
+
 ## Overview
 
 ![ActionCLIP](ActionCLIP.png)
+
 
 ## Content 
  - [Prerequisites](#prerequisites)
