@@ -296,12 +296,28 @@ def convert_weights(model: nn.Module):
                     attr.data = attr.data.half()
 
     model.apply(_convert_weights_to_fp16)
-
+ 
+def convert_statedict(dict: dict, ResNet: bool = False) -> dict:
+    """Convert each key (component) in the TinyViT state_dict
+    to match each key (component) in the vanilla CLIP model
+    For example: 'module.visual.conv0.weight' -> 'visual.conv1.weight'"""    
+    
+    new_dict = dict['state_dict'] # TinyCLIPs dict is ravelled 
+    if(ResNet):  
+        raise NotImplementedError("Conversion from TinyCLIP ResNet statedict not implemented, try a TinyClip ViT model instead.")
+    else:    
+        state_dict = {key.replace('module.', '', 1): value for key, value in new_dict.items()} # remove the 'module.' prefix of every key
+    return state_dict
 
 def build_model(state_dict: dict, tsm=False,T=8,dropout=0., joint=False,emb_dropout=0.,pretrain=True):
-    vit = "visual.proj" in state_dict
+    # If only one key, the state_dict is in TinyVit format
+    # and should be converted to vanilla CLIP format
+    key_amt = len(state_dict.keys()) 
+    if(key_amt == 1):
+       state_dict = convert_statedict(state_dict)        
+    is_vit = 'visual.proj' in state_dict 
 
-    if vit:
+    if is_vit:
         vision_width = state_dict["visual.conv1.weight"].shape[0]
         vision_layers = len([k for k in state_dict.keys() if k.startswith("visual.") and k.endswith(".attn.in_proj_weight")])
         vision_patch_size = state_dict["visual.conv1.weight"].shape[-1]
@@ -330,7 +346,7 @@ def build_model(state_dict: dict, tsm=False,T=8,dropout=0., joint=False,emb_drop
         context_length, vocab_size, transformer_width, transformer_heads, transformer_layers,  tsm=tsm,T=T,joint=joint,
         dropout=dropout, emb_dropout=emb_dropout
     )
-
+    
     for key in ["input_resolution", "context_length", "vocab_size"]:
         if key in state_dict:
             del state_dict[key]
@@ -364,5 +380,5 @@ def build_model(state_dict: dict, tsm=False,T=8,dropout=0., joint=False,emb_drop
                 state_dict.pop(k)
 
         model.load_state_dict(state_dict,strict=False)
-
+        
     return model.eval()
