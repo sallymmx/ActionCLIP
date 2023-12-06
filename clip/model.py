@@ -304,19 +304,25 @@ def convert_statedict(dict: dict, ResNet: bool = False) -> dict:
     
     new_dict = dict['state_dict'] # TinyCLIPs dict is ravelled 
     if(ResNet):  
-        raise NotImplementedError("Conversion from TinyCLIP ResNet statedict not implemented, try a TinyClip ViT model instead.")
+        raise NotImplementedError("Conversion from TinyCLIP ResNet statedict not implemented, use a TinyClip ViT-based model instead.")
     else:    
         state_dict = {key.replace('module.', '', 1): value for key, value in new_dict.items()} # remove the 'module.' prefix of every key
     return state_dict
 
-def build_model(state_dict: dict, tsm=False,T=8,dropout=0., joint=False,emb_dropout=0.,pretrain=True):
-    # If only one key, the state_dict is in TinyVit format
-    # and should be converted to vanilla CLIP format
-    key_amt = len(state_dict.keys()) 
-    if(key_amt == 1):
-       state_dict = convert_statedict(state_dict)        
+def build_model(state_dict: dict, tsm=False,T=8,dropout=0., joint=False,emb_dropout=0.,pretrain=True, clip_backbone = "CLIP"):      
+    
+    # Determine selected clip backbone, convert
+    # state_dict weights of TinyCLIP to CLIP if
+    # TinyCLIP is selected
+    if(clip_backbone == "TinyCLIP"):
+        state_dict = convert_statedict(state_dict)
+    elif(clip_backbone == "CLIP"):
+        pass
+    else:
+        raise RuntimeError("build_model(): did not recognise CLIP backbone: {}, ensure model names are prepended with 'CLIP' or 'TinyCLIP'".format(clip_backbone))
+    
+    print("Clip model (Vanilla clip/TinyCLIP) set to: {}".format(clip_backbone))
     is_vit = 'visual.proj' in state_dict 
-
     if is_vit:
         vision_width = state_dict["visual.conv1.weight"].shape[0]
         vision_layers = len([k for k in state_dict.keys() if k.startswith("visual.") and k.endswith(".attn.in_proj_weight")])
