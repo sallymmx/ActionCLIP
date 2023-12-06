@@ -20,7 +20,7 @@ data:
         M: 9  #9
     random_shift: True
 network:
-    arch: ViT-B/32  #ViT-B/32 ViT-B/16
+    arch: CLIP-ViT-B/16  #CLIP-ViT-B/32 CLIP-ViT-B/16 TinyCLIP-ViT-61M/32-Text-29M TinyCLIP-ViT-40M/32-Text-19M
     init: True
     tsm: False
     drop_out: 0.0 

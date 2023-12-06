@@ -7,7 +7,6 @@ import os
 import urllib
 import warnings
 from typing import Union, List
-
 import torch
 from PIL import Image
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
@@ -20,22 +19,35 @@ __all__ = ["available_models", "load", "tokenize"]
 _tokenizer = _Tokenizer()
 
 _MODELS = {
-    "ViT-B/32": "https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt",
-    "ViT-B/16": "https://openaipublic.azureedge.net/clip/models/5806e77cd80f8b59890b7e101eabd078d9fb84e6937f9e85e4ecb61988df416f/ViT-B-16.pt"
-}
+    "CLIP-ViT-B/32": "https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt",
+    "CLIP-ViT-B/16": "https://openaipublic.azureedge.net/clip/models/5806e77cd80f8b59890b7e101eabd078d9fb84e6937f9e85e4ecb61988df416f/ViT-B-16.pt",
+    "TinyCLIP-ViT-40M/32-Text-19M": "https://github.com/wkcn/TinyCLIP-model-zoo/releases/download/checkpoints/TinyCLIP-ViT-40M-32-Text-19M-LAION400M.pt",
+    "TinyCLIP-ViT-61M/32-Text-29M": "https://github.com/wkcn/TinyCLIP-model-zoo/releases/download/checkpoints/TinyCLIP-ViT-61M-32-Text-29M-LAION400M.pt",
+}   
 
-def _download(url: str, root: str = os.path.expanduser("~/.cache/clip")):
+def _download(url: str, root: str = os.path.expanduser("~/.cache/clip"), skip_sha256 = False):
+    '''Download CLIP model to cache. Optionally, skip_sha256 checksum skips
+    the checksum to allow for downloading the official TinyCLIP models because 
+    they are not supplied.'''
+    
+    if(skip_sha256):
+        warnings.warn(f"Skipping sha256 checksum matching because it is not available for TinyCLIP model.")
+        
     os.makedirs(root, exist_ok=True)
     filename = os.path.basename(url)
 
     expected_sha256 = url.split("/")[-2]
     download_target = os.path.join(root, filename)
-
+        
     if os.path.exists(download_target) and not os.path.isfile(download_target):
         raise RuntimeError(f"{download_target} exists and is not a regular file")
-
+    
     if os.path.isfile(download_target):
-        if hashlib.sha256(open(download_target, "rb").read()).hexdigest() == expected_sha256:
+        # TinyCLIP does not come with checksum, return
+        # download target early
+        if skip_sha256: 
+            return download_target
+        elif hashlib.sha256(open(download_target, "rb").read()).hexdigest() == expected_sha256:
             return download_target
         else:
             warnings.warn(f"{download_target} exists, but the SHA256 checksum does not match; re-downloading the file")
@@ -46,12 +58,11 @@ def _download(url: str, root: str = os.path.expanduser("~/.cache/clip")):
                 buffer = source.read(8192)
                 if not buffer:
                     break
-
                 output.write(buffer)
                 loop.update(len(buffer))
-
-    if hashlib.sha256(open(download_target, "rb").read()).hexdigest() != expected_sha256:
-        raise RuntimeError(f"Model has been downloaded but the SHA256 checksum does not not match")
+    if not skip_sha256:
+        if hashlib.sha256(open(download_target, "rb").read()).hexdigest() != expected_sha256:
+            raise RuntimeError(f"Model has been downloaded but the SHA256 checksum does not not match")
 
     return download_target
 
@@ -93,8 +104,15 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
     preprocess : Callable[[PIL.Image], torch.Tensor]
         A torchvision transform that converts a PIL image into a tensor that the returned model can take as its input
     """
+    # Obtain CLIP backbone name by splitting on '-' 
+    # and obtaining the preprended CLIP name
+    clip_name = str.split(name, "-")[0] # [CLIP, TinyCLIP]
+    
     if name in _MODELS:
-        model_path = _download(_MODELS[name])
+        is_tinyclip = clip_name == "TinyCLIP"
+        # Only skip sha_256 checksum if backbone set to TinyCLIP
+        # because no sha_256 checksum is available
+        model_path = _download(_MODELS[name], skip_sha256=is_tinyclip)
     elif os.path.isfile(name):
         model_path = name
     else:
@@ -112,8 +130,8 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
         state_dict = torch.load(model_path, map_location="cpu")
 
     if not jit:
-
-        model = build_model(state_dict or model.state_dict(), joint=joint,tsm=tsm,T=T,dropout=dropout, emb_dropout=emb_dropout,pretrain=pretrain).to(device)
+        # Split on first '-' to decide whether CLIP or TinyCLIP is backbone
+        model = build_model(state_dict or model.state_dict(), joint=joint,tsm=tsm,T=T,dropout=dropout, emb_dropout=emb_dropout,pretrain=pretrain, clip_backbone=clip_name).to(device)
         if str(device) == "cpu":
             model.float()
         
