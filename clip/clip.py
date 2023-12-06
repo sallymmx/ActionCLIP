@@ -15,7 +15,6 @@ from tqdm import tqdm
 from .model import build_model
 from .simple_tokenizer import SimpleTokenizer as _Tokenizer
 
-CLIP_backbones = ["vanilla_CLIP, tiny_CLIP"]
 __all__ = ["available_models", "load", "tokenize"]
 _tokenizer = _Tokenizer()
 
