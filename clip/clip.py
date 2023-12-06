@@ -25,10 +25,14 @@ _MODELS = {
     "TinyCLIP-ViT-61M/32-Text-29M": "https://github.com/wkcn/TinyCLIP-model-zoo/releases/download/checkpoints/TinyCLIP-ViT-61M-32-Text-29M-LAION400M.pt",
 }   
 
-def _download(url: str, root: str = os.path.expanduser("~/.cache/clip"), skip_sha256 = True):
+def _download(url: str, root: str = os.path.expanduser("~/.cache/clip"), skip_sha256 = False):
     '''Download CLIP model to cache. Optionally, skip_sha256 checksum skips
     the checksum to allow for downloading the official TinyCLIP models because 
     they are not supplied.'''
+    
+    if(skip_sha256):
+        warnings.warn(f"Skipping sha256 checksum matching because it is not available for TinyCLIP model.")
+        
     os.makedirs(root, exist_ok=True)
     filename = os.path.basename(url)
 
@@ -100,8 +104,15 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
     preprocess : Callable[[PIL.Image], torch.Tensor]
         A torchvision transform that converts a PIL image into a tensor that the returned model can take as its input
     """
+    # Obtain CLIP backbone name by splitting on '-' 
+    # and obtaining the preprended CLIP name
+    clip_name = str.split(name, "-")[0] # [CLIP, TinyCLIP]
+    
     if name in _MODELS:
-        model_path = _download(_MODELS[name])
+        is_tinyclip = clip_name == "TinyCLIP"
+        # Only skip sha_256 checksum if backbone set to TinyCLIP
+        # because no sha_256 checksum is available
+        model_path = _download(_MODELS[name], skip_sha256=is_tinyclip)
     elif os.path.isfile(name):
         model_path = name
     else:
@@ -120,7 +131,6 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
 
     if not jit:
         # Split on first '-' to decide whether CLIP or TinyCLIP is backbone
-        clip_name = str.split(name, "-")[0]
         model = build_model(state_dict or model.state_dict(), joint=joint,tsm=tsm,T=T,dropout=dropout, emb_dropout=emb_dropout,pretrain=pretrain, clip_backbone=clip_name).to(device)
         if str(device) == "cpu":
             model.float()

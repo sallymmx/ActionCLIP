@@ -18,7 +18,7 @@ data:
         N: 0 #2
         M: 0  #9
 network:
-    arch: ViT-B/16  #ViT-B/32 ViT-B/16 TinyCLIP-ViT-61M/32-Text-29M TinyCLIP-ViT-40M/32-Text-19M
+    arch: CLIP-ViT-B/16  #CLIP-ViT-B/32 CLIP-ViT-B/16 TinyCLIP-ViT-61M/32-Text-29M TinyCLIP-ViT-40M/32-Text-19M
     init: True 
     drop_out: 0.0 
     emb_dropout: 0.0
